@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
     <!-- axios -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
 </head>
 <body>
     <nav>
@@ -49,7 +50,7 @@
                       </div>
                       <div class="card-action">
                           <div class="row">
-                            <a href="#">Despachado</a>
+                            <a v-on:click="generarPDF(pedido)" href="#">Imprimir</a>
                             <a href="#" v-on:click="marcarPedidoEntregado(pedido)">Entregado</a>
                             <a href="#" class="right disable">{{getTimeAgo(pedido.pedido.hora)}}</a>
                           </div>

@@ -3,6 +3,11 @@ const es = require('javascript-time-ago/locale/es')
 TimeAgo.addLocale(es)
 const timeAgo = new TimeAgo('es')
 
+const fs = require('fs')
+const jsPDF = require('jspdf/dist/jspdf.node.min')
+
+const path = require('path')
+
 const url = 'http://localhost:3000/'
 
 var domicilios = [], menus = [], nombrePlato, nombreBarrio
@@ -173,6 +178,42 @@ var app = new Vue({
                     this.pedidos = lista
                 }) 
             }) 
+        },
+        generarPDF(info){
+            global.window = {document: {createElementNS: () => {return {}} }};
+            global.navigator = {};
+            global.btoa = () => {};
+
+            var doc = new jsPDF({orientation: 'landscape'})
+
+            let linea = 10
+            doc.setFontSize(22);
+            doc.text('Respaturante Rico Mondongo', 10, linea)
+            linea += 20
+            doc.setFontSize(16);
+            doc.text(`Cliente ${info.cliente.nombre}`, 10, linea)
+            linea += 10
+            doc.text(info.cliente.direccion, 10, linea)
+            linea += 10
+            doc.text(info.cliente.telefono, 10, linea)
+            linea += 20
+            doc.setFontSize(12);
+            info.pedido.platos.forEach(plato => {
+                doc.text(`${plato.nombre} - ${plato.cantidad} - ${plato.total}`, 10, linea)
+                linea += 10
+            });
+            linea += 10
+            doc.setFontSize(16);
+            doc.text(` Valor domicilio ${info.pedido.valorDomicilio}`, 10, linea)
+            linea += 10
+            doc.text(` Total ${info.pedido.total}`, 10, linea)
+
+            fs.writeFileSync(`./src/facturas/${info.cliente.nombre}.pdf`, doc.output())
+            // doc.save('a4.pdf')
+
+            delete global.window;
+            delete global.navigator;
+            delete global.btoa;
         }
     }
 })
