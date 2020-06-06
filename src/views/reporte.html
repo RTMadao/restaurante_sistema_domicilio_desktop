@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="../css/index.css">
+
+    <!-- Materialize -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper orange lighten-3">
+          <a href="#" class="brand-logo center">Rico Mondongo</a>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="col s3 m3 barraLateral" style="padding: 0px 0px;">
+            <div class="collection barraLateral" style="margin: 0px 0px;">
+                <a href="../views/pedidos.html" class="collection-item ">Pedido<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
+                <a href="../views/menu.html" class="collection-item">Menu<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
+                <a href="../views/domicilio.html" class="collection-item">Domicilio<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
+                <a href="#!" class="collection-item active">Reporte diario<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
+            </div>
+        </div>
+        <div id="app" style="margin-left: 200px;">
+            <a class="btn waves-effect waves-light" style="width: 90%; margin-left: 5%; margin-top: 10px;" v-on:click="generar">Generar</a>
+            <div>
+                <h3>fecha: {{reporte.fecha}}</h3>
+                <table>
+                    <thead>
+                      <tr>
+                          <th>Plato</th>
+                          <th>Cantidad</th>
+                          <th>Valor</th>
+                      </tr>
+                    </thead>
+            
+                    <tbody>
+                      <tr v-for="item in reporte.items">
+                        <td>{{item.nombre}}</td>
+                        <td>{{item.cantidad}}</td>
+                        <td>{{item.valor}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <h3>Domicilio: {{reporte.valorDomicilio}}</h3>
+                  <h3>Total: {{reporte.total}}</h3>
+            </div>
+        </div>
+    </div>
+    <script src="../controller/reporte.controller.js"></script>
+</body>
+</html>

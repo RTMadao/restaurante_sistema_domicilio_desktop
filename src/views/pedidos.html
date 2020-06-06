@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="../css/index.css">
+
+    <!-- Materialize -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper orange lighten-3">
+          <a href="#" class="brand-logo center">Rico Mondongo</a>
+        </div>
+    </nav>
+    <div class="row">
+        <div class="barraLateral" style="padding: 0px 0px;">
+            <div class="collection barraLateral" style="margin: 0px 0px;">
+                <a href="#!" class="collection-item active ">Pedido<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
+                <a href="../views/menu.html" class="collection-item">Menu<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
+                <a href="#!" class="collection-item">Domicilio<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
+                <a href="../views/reporte.html" class="collection-item">Reporte diario<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
+            </div>
+        </div>
+        <div id="app" style="margin-left: 200px;">
+            <div class="col s5 m5">
+                <div class="col s12 m12" v-for="pedido in pedidos">
+                    <div class="card teal lighten-1" v-if="pedido.cliente != undefined">
+                      <div class="card-content white-text">
+                        <span class="card-title">{{pedido.cliente.nombre}}</span>
+                        <span class="card-title">{{pedido.cliente.telefono}}</span>
+                        <span class="card-title">{{pedido.cliente.direccion}}</span>
+                        <ul class="collection with-header">
+                            <li v-for="plato in pedido.pedido.platos" class="collection-item teal lighten-1">{{plato.nombre}}<div class="secondary-content"><p style="color: azure;">{{plato.cantidad}}</p></div></li>
+                        </ul>
+                      </div>
+                      <div class="card-action">
+                          <div class="row">
+                            <a href="#">Despachado</a>
+                            <a href="#" v-on:click="marcarPedidoEntregado(pedido)">Entregado</a>
+                            <a href="#" class="right disable">{{getTimeAgo(pedido.pedido.hora)}}</a>
+                          </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col s5 m7">
+                <div class="row" style="margin: 50px 100px;">
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input v-model="nuevoPedido.nombre" type="text" class="validate">
+                            <label class="active">Nombre</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input id="autocomplete" v-model="nuevoPedido.barrio" type="text" class="autocompleteD">
+                            <label for="autocomplete" class="active">Barrio</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6">
+                            <input v-model="nuevoPedido.telefono" type="text" class="validate">
+                            <label class="active">Telefono</label>
+                        </div>
+                        <div class="input-field col s6">
+                            <input v-model="nuevoPedido.direccion" type="text" class="validate">
+                            <label class="active">Direccion</label>
+                        </div>
+                    </div>
+                    <div>
+                        <ul class="collection">
+                            <li v-for="plato in nuevoPedido.pedido.platos" class="collection-item">{{plato.nombre}}<div class="secondary-content">{{plato.cantidad}}</div></li>
+                        </ul>
+                        <div class="row">
+                            <div class="input-field col s9">
+                                <input v-model="item.nombre" id="autocomplete" type="text" class="autocompleteM">
+                                <label for="autocomplete" class="active">Plato</label>
+                            </div>
+                            <div class="input-field col s2">
+                                <input v-model="item.cantidad"  type="number" class="validate">
+                                <label class="active">Cantidad</label>
+                            </div>
+                            <a class="btn waves-effect waves-light col s1" style="margin-top: 25px;"  v-on:click="agregarItem">+</a>
+                        </div>
+                        <h4>Domicilio  {{nuevoPedido.pedido.valorDomicilio}}</h4>
+                        <h4>Total  {{total}}</h4>
+                        <a class="btn waves-effect waves-light col s12" style="margin-top: 25px;"  v-on:click="guardar">Guardar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../controller/pedido.cpntroller.js"></script>
+</body>
+</html>
