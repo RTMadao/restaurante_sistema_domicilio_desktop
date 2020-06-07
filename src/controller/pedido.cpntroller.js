@@ -1,16 +1,24 @@
+//TiME AGO
 const TimeAgo = require('javascript-time-ago')
 const es = require('javascript-time-ago/locale/es')
 TimeAgo.addLocale(es)
 const timeAgo = new TimeAgo('es')
 
-const fs = require('fs')
-const jsPDF = require('jspdf/dist/jspdf.node.min')
-
+//NUEVA VENTANA ELECTRON
+const electron = require('electron')
 const path = require('path')
+const BrowserWindow = electron.remote.BrowserWindow
+
+//JSPDF
+const fs = require('fs')
+const FacturaPDF = require('../model/FacturaPDF')
+const jsPDF = require('jspdf/dist/jspdf.node.min')
 
 const url = 'http://localhost:3000/'
 
-var domicilios = [], menus = [], nombrePlato, nombreBarrio
+var domicilios = [], menus = [], nombrePlato, nombreBarrio, factura = 'a'
+
+module.exports = factura
 
 document.addEventListener('DOMContentLoaded', function() {
     var elemsD = document.querySelectorAll('.autocompleteD');
@@ -108,6 +116,7 @@ var app = new Vue({
             base: 0
         }
       },
+      factura: {cliente:{nombre:'hola'}},
       item: {
           nombre:'',
           cantidad:''
@@ -180,40 +189,18 @@ var app = new Vue({
             }) 
         },
         generarPDF(info){
-            global.window = {document: {createElementNS: () => {return {}} }};
-            global.navigator = {};
-            global.btoa = () => {};
 
-            var doc = new jsPDF({orientation: 'landscape'})
+            const modalPath = path.join('file://', __dirname, '/factura.html')
+            let win = new BrowserWindow({ width: 400, height: 800, webPreferences: { nodeIntegration: true } })
+            win.on('close', function () { win = null })
+            win.loadURL(modalPath)
+            win.show()
 
-            let linea = 10
-            doc.setFontSize(22);
-            doc.text('Respaturante Rico Mondongo', 10, linea)
-            linea += 20
-            doc.setFontSize(16);
-            doc.text(`Cliente ${info.cliente.nombre}`, 10, linea)
-            linea += 10
-            doc.text(info.cliente.direccion, 10, linea)
-            linea += 10
-            doc.text(info.cliente.telefono, 10, linea)
-            linea += 20
-            doc.setFontSize(12);
-            info.pedido.platos.forEach(plato => {
-                doc.text(`${plato.nombre} - ${plato.cantidad} - ${plato.total}`, 10, linea)
-                linea += 10
-            });
-            linea += 10
-            doc.setFontSize(16);
-            doc.text(` Valor domicilio ${info.pedido.valorDomicilio}`, 10, linea)
-            linea += 10
-            doc.text(` Total ${info.pedido.total}`, 10, linea)
-
-            fs.writeFileSync(`./src/facturas/${info.cliente.nombre}.pdf`, doc.output())
-            // doc.save('a4.pdf')
-
-            delete global.window;
-            delete global.navigator;
-            delete global.btoa;
+            try {
+                fs.writeFileSync(path.join( __dirname, '/../factura.json'), JSON.stringify(info))
+              } catch (err) {
+                console.error(err)
+              }
         }
     }
 })
