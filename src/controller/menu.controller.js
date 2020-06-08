@@ -1,31 +1,13 @@
 const url = 'http://localhost:3000/menu'
+const CSVreader = require('../model/CSVReader')
+const AxiosRequest = require('../model/AxiosRequest')
 
-function post(body) {
-    return new Promise ((resolve, reject) => {
-        axios.post(url, body)
-        .then(function(res) {
-            console.log(res.data.mensaje)
-            resolve(res.data.mensaje)
-        })
-        .catch(function(err) {
-            console.log(err);
-        })
-    })
+
+function getCSV(file) {
+    app.archivoCSV = file[0].path;
 }
 
-function get() {
-    return new Promise ((resolve, reject) => {
-        axios.get(url, {
-        responseType: 'json'
-      })
-        .then(function(res) {
-          resolve(res.data.lista)
-        })
-        .catch(function(err) {
-          console.log(err);
-        })
-    })
-}
+
 
 var app = new Vue({
     el: '#app',
@@ -34,24 +16,33 @@ var app = new Vue({
       nuevoPlato:{
           nombre:'',
           precio:''
-      }
+      },
+      archivoCSV:''
     },
     created: async function () {
-        this.menu = await get()
+        this.menu = await AxiosRequest.get(url)
     },
     computed:{
     },
     methods:{
         guardar(){
-            post({
+            AxiosRequest.post({
                 nombre: this.nuevoPlato.nombre,
                 precio: this.nuevoPlato.precio
-            })
+            }, url)
             .then( async res => {
                 this.nuevoPlato.nombre = ''
                 this.nuevoPlato.precio = ''
-                this.menu = await get()
+                this.menu = await AxiosRequest.get(url)
             })
+        },
+        guardarDesdeCSV(){
+            CSVreader.parseData(this.archivoCSV)
+            .then( async menuCSV => {
+                await AxiosRequest.post(menuCSV, url+'/conjunto')
+                this.menu = await AxiosRequest.get(url)
+            })
+            
         }
     }
 })

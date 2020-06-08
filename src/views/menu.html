@@ -1,80 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu</title>
 
-    <!-- css -->
-    <link rel="stylesheet" href="../css/index.css">
+  <!-- css -->
+  <link rel="stylesheet" href="../css/index.css">
 
-    <!-- Materialize -->
-    <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- vue -->
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-    <!-- axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- Materialize -->
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- vue -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+  <!-- axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
+
 <body>
-    <nav>
-        <div class="nav-wrapper orange lighten-3">
-          <a href="#" class="brand-logo center">Rico Mondongo</a>
-        </div>
-    </nav>
-    <div class="row">
-        <div class="barraLateral" style="padding: 0px 0px;">
-            <div class="collection barraLateral" style="margin: 0px 0px;">
-                <a href="../views/pedidos.html" class="collection-item">Pedido<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-                <a href="#!" class="collection-item active">Menu<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-                <a href="../views/domicilio.html" class="collection-item">Domicilio<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-                <a href="../views/reporte.html" class="collection-item">Reporte diario<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-            </div>
-        </div>
-        <div id="app" style="margin-left: 200px;">
-            <div class="row" style="margin-top: 50;">
-              <div class="col s6 m4" style="margin-left: 100px; margin-right: 50px;">
-                <table>
-                  <thead>
-                    <tr>
-                        <th>Plato</th>
-                        <th>Precio</th>
-                    </tr>
-                  </thead>
-          
-                  <tbody>
-                    <tr v-for="m in menu">
-                      <td>{{m.nombre}}</td>
-                      <td>{{m.precio}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col s6 m4">
-                  <div class="card-pane blue-grey lighten-4" style="padding: 15px 10px; align-items: center;">
-                    <div class="card-content">
-                      <div style="text-align: center;">
-                        <h4>Nuevo plato</h4>
-                      </div>
-                      <div class="input-field col s12 m12" style="margin-bottom: 10px;">
-                          <input v-model="nuevoPlato.nombre" type="text" class="validate">
-                          <label class="active">Nombre</label>
-                      </div>
-                    </div>
-                    <div class="input-field col s12 m12">
-                      <input v-model="nuevoPlato.precio" type="text" class="validate">
-                      <label class="active">Precio</label>
-                    </div>
-                    <a class="btn waves-effect waves-light" style="width: 90%; margin-left: 5%" v-on:click="guardar">Guardar</a>
-                  </div>
-                </div>
-              </div>
-        </div>
+  <nav>
+    <div class="nav-wrapper orange lighten-3">
+      <a href="#" class="brand-logo center">Rico Mondongo</a>
     </div>
-    <script src="../controller/menu.controller.js"></script>
+  </nav>
+  <div class="row">
+    <div class="barraLateral" style="padding: 0px 0px;">
+      <div class="collection barraLateral" style="margin: 0px 0px;">
+        <a href="../views/pedidos.html" class="collection-item">Pedido<div class="secondary-content"><i
+              class="material-icons">chevron_right</i></div></a>
+        <a href="#!" class="collection-item active">Menu<div class="secondary-content"><i
+              class="material-icons">chevron_right</i></div></a>
+        <a href="../views/domicilio.html" class="collection-item">Domicilio<div class="secondary-content"><i
+              class="material-icons">chevron_right</i></div></a>
+        <a href="../views/reporte.html" class="collection-item">Reporte diario<div class="secondary-content"><i
+              class="material-icons">chevron_right</i></div></a>
+      </div>
+    </div>
+    <div id="app" style="margin-left: 200px;">
+      <div class="row" style="margin-top: 50;">
+        <div class="col s6 m4" style="margin-left: 100px; margin-right: 50px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Plato</th>
+                <th>Precio</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="m in menu">
+                <td>{{m.nombre}}</td>
+                <td>{{m.precio}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col s6 m4">
+          <div class="card-pane blue-grey lighten-4" style="padding: 15px 10px; align-items: center;">
+            <div class="card-content">
+              <div style="text-align: center;">
+                <h4>Nuevo plato</h4>
+              </div>
+              <div class="input-field col s12 m12" style="margin-bottom: 10px;">
+                <input v-model="nuevoPlato.nombre" type="text" class="validate">
+                <label class="active">Nombre</label>
+              </div>
+            </div>
+            <div class="input-field col s12 m12">
+              <input v-model="nuevoPlato.precio" type="text" class="validate">
+              <label class="active">Precio</label>
+            </div>
+            <a class="btn waves-effect waves-light" style="width: 90%; margin-left: 5%" v-on:click="guardar">Guardar</a>
+          </div>
+          <div class="row col s12 m12" style="margin-top: 30px;">
+            <h5>Cargar desde archivo</h5>
+            <div class="file-field input-field col s8 m8">
+              <div class="btn">
+                <span><i class="material-icons">search</i></span>
+                <input id="inputField" onchange="getCSV(this.files)" type="file" accept=".csv">
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+              </div>
+            </div>
+            <a class="btn waves-effect waves-light" style="width: 27%; margin-left: 5%; margin-top: 20px;" v-on:click="guardarDesdeCSV()">Guardar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="../controller/menu.controller.js" charset="utf-8"></script>
 </body>
+
 </html>

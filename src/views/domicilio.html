@@ -71,10 +71,23 @@
                     </div>
                     <a class="btn waves-effect waves-light" style="width: 90%; margin-left: 5%" v-on:click="guardar">Guardar</a>
                   </div>
+                <div class="row col s12 m12" style="margin-top: 30px;">
+                  <h5>Cargar desde archivo</h5>
+                  <div class="file-field input-field col s8 m8">
+                    <div class="btn">
+                      <span><i class="material-icons">search</i></span>
+                      <input id="inputField" onchange="getCSV(this.files)" type="file" accept=".csv">
+                    </div>
+                    <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text">
+                    </div>
+                  </div>
+                  <a class="btn waves-effect waves-light" style="width: 27%; margin-left: 5%; margin-top: 20px;" v-on:click="guardarDesdeCSV()">Guardar</a>
+                </div>
                 </div>
               </div>
         </div>
     </div>
-    <script src="../controller/domicilio.controller.js"></script>
+    <script src="../controller/domicilio.controller.js" charset="utf-8"></script>
 </body>
 </html>
