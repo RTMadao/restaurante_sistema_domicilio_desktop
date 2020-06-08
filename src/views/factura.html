@@ -88,9 +88,24 @@
                     <td>{{item.cantidad}}</td>
                     <td>{{moneda(item.total)}}</td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Domicilio</td>
+                    <td></td>
+                    <td>{{moneda(factura.pedido.valorDomicilio)}}</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td>{{moneda(factura.pedido.total)}}</td>
+                </tr>
             </tbody>
         </table>
-        <h6>GRACIAS POR SU COMPRA</h6>
+        <h6 style="margin-top: 1px;">GRACIAS POR SU COMPRA</h6>
         <h6>DOCUMENTO EQUIVALENTE</h6>
     </div>
     <script>
@@ -119,7 +134,7 @@
                     }).format(valor);
                 },
                 formatofecha(fecha){
-                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false};
                     return new Date(fecha).toLocaleDateString('es-CO', options)
                 }
             },
