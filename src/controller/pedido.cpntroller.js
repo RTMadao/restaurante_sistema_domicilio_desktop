@@ -191,7 +191,7 @@ var app = new Vue({
         generarPDF(info){
 
             const modalPath = path.join('file://', __dirname, '/factura.html')
-            let win = new BrowserWindow({ width: 400, height: 800, webPreferences: { nodeIntegration: true } })
+            let win = new BrowserWindow({ width: 400, height: 500, webPreferences: { nodeIntegration: true } })
             win.on('close', function () { win = null })
             win.loadURL(modalPath)
             win.show()

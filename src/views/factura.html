@@ -14,6 +14,55 @@
     <!-- vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
     <script src="assets/js/lib/html2canvas.js"></script>
+    <style>
+        * {
+            font-size: 12px;
+            font-family: 'Times New Roman';
+        }
+        td,
+        th,
+        tr,
+        table {
+            border-collapse: collapse;
+            border-spacing: 1px 1px;
+            padding: 0%;
+        }
+
+        h6{
+            margin: 0px;
+            padding: 1px;
+        }
+
+        td.producto,
+        th.producto {
+            width: 75px;
+            max-width: 75px;
+        }
+
+        td.cantidad,
+        th.cantidad {
+            width: 40px;
+            max-width: 40px;
+            word-break: break-all;
+        }
+
+        td.precio,
+        th.precio {
+            width: 40px;
+            max-width: 40px;
+            word-break: break-all;
+        }
+
+        .centrado {
+            text-align: center;
+            align-content: center;
+        }
+
+        .ticket {
+            width: 155px;
+            max-width: 155px;
+        }
+    </style>
 </head>
 <body>
     <div id="app" class="factura" style="min-width: 100%;">
@@ -21,12 +70,11 @@
         <h6>CELMIRA LOBELO TAPIA</h6>
         <h6>NIT: 33138369-6 REG COMUN</h6>
         <h6>FACTURA DE VENTA</h6>
-        <div style="margin-top: 10px;">
-            <h6>Cliente: {{factura.cliente.nombre}}</h6>
-            <h6>Direccion: {{factura.cliente.direccion}}</h6>
-            <h6>Telefono: {{factura.cliente.telefono}}</h6> 
-        </div>
-        <table style="margin: 30px 10px;">
+        <h6>{{formatofecha(factura.pedido.hora)}}</h6>
+        <h6>Cliente: {{factura.cliente.nombre}}</h6>
+        <h6>Direccion: {{factura.cliente.direccion}}</h6>
+        <h6>Telefono: {{factura.cliente.telefono}}</h6> 
+        <table>
             <thead>
                 <tr>
                   <th>Plato</th>
@@ -38,7 +86,7 @@
                 <tr v-for="item in factura.pedido.platos">
                     <td>{{item.nombre}}</td>
                     <td>{{item.cantidad}}</td>
-                    <td>{{item.total}}</td>
+                    <td>{{moneda(item.total)}}</td>
                 </tr>
             </tbody>
         </table>
@@ -48,8 +96,6 @@
     <script>
         const path = require('path')
         const fs = require('fs')
-        const html2canvas  = require('html2canvas')
-        const jsPDF = require('jspdf/dist/jspdf.node.min')
         
         var app = new Vue({
             el: '#app',
@@ -64,24 +110,22 @@
                 }
                 console.log(this.factura)
             },
+            methods: {
+                moneda(valor){
+                    return new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP',
+                        minimumFractionDigits: 0
+                    }).format(valor);
+                },
+                formatofecha(fecha){
+                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    return new Date(fecha).toLocaleDateString('es-CO', options)
+                }
+            },
         })
-        global.window = {document: {createElementNS: () => {return {}} }};
-        global.navigator = {};
-        global.btoa = () => {};
 
-        doc = new jsPDF({
-            orientation: 'p',
-            unit: 'mm',
-            format: [200, 70]
-        })
-
-        var container = document.body; // full page 
-        html2canvas(container).then(function(canvas) {
-            var image = canvas.toDataURL("image/png");
-            doc.addImage(image, 'JPEG', 15, 0, 34, 37);
-        });
-
-        fs.writeFileSync(`./facturas/${app.factura.cliente.nombre}.pdf`, doc.output())
+        window.print();
         
     </script>
 </body>
