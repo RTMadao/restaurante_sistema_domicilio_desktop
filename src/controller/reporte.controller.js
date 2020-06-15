@@ -40,14 +40,7 @@ var app = new Vue({
             .then(res => {
                 this.reporte = res
                 console.log(this.reporte);
-                // let printContents = document.getElementById('reporte').innerHTML;
-                // let originalContents = document.body.innerHTML;
-
-                // document.body.innerHTML = printContents;
-
-                // window.print();
-
-                // document.body.innerHTML = originalContents;
+                window.print();
             })
            
             
