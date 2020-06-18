@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes</title>
+    <!-- css -->
+    <link rel="stylesheet" href="../css/index.css">
+    <!-- Materialize -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <!-- axios -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+        * {
+            font-size: 12px;
+            font-family: 'Times New Roman';
+        }
+        td,
+        th,
+        tr,
+        table {
+            border-collapse: collapse;
+            border-spacing: 1px 1px;
+            padding: 0%;
+        }
+
+        h6{
+            margin: 0px;
+            padding: 1px;
+        }
+
+        td.producto,
+        th.producto {
+            width: 75px;
+            max-width: 75px;
+        }
+
+        td.cantidad,
+        th.cantidad {
+            width: 40px;
+            max-width: 40px;
+            word-break: break-all;
+        }
+
+        td.precio,
+        th.precio {
+            width: 40px;
+            max-width: 40px;
+            word-break: break-all;
+        }
+
+        .centrado {
+            text-align: center;
+            align-content: center;
+        }
+
+        .ticket {
+            width: 155px;
+            max-width: 155px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="factura" style="min-width: 100%;">
+        <h5>RESTAURANTE RICO MONDONGO</h5>
+        <h6>CELMIRA LOBELO TAPIA</h6>
+        <h6>NIT: 33138369-6 REG COMUN</h6>
+        <h6>fecha: {{reporte.fecha}}</h6>
+        <table>
+            <thead>
+                <tr>
+                    <th>Plato</th>
+                    <th>Cant</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+    
+            <tbody>
+                <tr v-for="item in reporte.items">
+                <td>{{item.nombre}}</td>
+                <td>{{item.cantidad}}</td>
+                <td>{{item.valor}}</td>
+                </tr>
+            </tbody>
+            </table>
+            <h6>Domicilio: {{reporte.valorDomicilio}}</h6>
+            <h6>Total: {{reporte.total}}</h6>
+    </div>
+    <script>
+        const path = require('path')
+        const fs = require('fs')
+        const url = 'http://localhost:3000/reporte'
+        
+        var app = new Vue({
+            el: '#app',
+            data: {
+                reporte: ''
+            },
+            created() {
+                axios.get(url, {
+                    responseType: 'json'
+                })
+                .then((res) => {
+                    this.reporte = res.data.reporte
+                    console.log(this.reporte);
+                    setTimeout(() => {  window.print(); }, 2000);
+                    
+                })
+                .catch(function(err) {
+                    console.log(err);
+                })
+            },
+            methods: {
+                moneda(valor){
+                    return new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP',
+                        minimumFractionDigits: 0
+                    }).format(valor);
+                },
+                formatofecha(fecha){
+                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false};
+                    return new Date(fecha).toLocaleDateString('es-CO', options)
+                }
+            },
+        })
+        
+        
+    </script>
+</body>
+</html>

@@ -1,4 +1,7 @@
 const url = 'http://localhost:3000/reporte'
+const electron = require('electron')
+const path = require('path')
+const BrowserWindow = electron.remote.BrowserWindow
 
 function post(body) {
     return new Promise ((resolve, reject) => {
@@ -36,13 +39,11 @@ var app = new Vue({
     },
     methods:{
         generar(){
-            get()
-            .then(res => {
-                this.reporte = res
-                console.log(this.reporte);
-                window.print();
-            })
-           
+            const modalPath = path.join('file://', __dirname, '/Ireporte.html')
+            let win = new BrowserWindow({ width: 400, height: 500, webPreferences: { nodeIntegration: true } })
+            win.on('close', function () { win = null })
+            win.loadURL(modalPath)
+            win.show()
             
         }
     }
