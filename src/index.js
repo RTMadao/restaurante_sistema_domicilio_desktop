@@ -4,6 +4,10 @@ const path = require('path')
 
 let mainWindow
 
+//websocket
+const socketclient = require('./socket')
+socketclient.start()
+
 if(process.env.NODE_ENV !== 'production'){
     require('electron-reload')(__dirname, {
         electron: path.join(__dirname, '../node_modules', '.bin', 'electron')
