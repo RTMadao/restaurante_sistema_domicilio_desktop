@@ -1,46 +1,73 @@
-const url = 'http://localhost:3000/domicilio'
 const CSVreader = require('../model/CSVReader')
-const AxiosRequest = require('../model/AxiosRequest')
+const dataStorage = require('../model/DataStorage')
+const formato = require('../model/FormatoInfo')
 
-
-function getCSV(file) {
-    app.archivoCSV = file[0].path;
-}
 
 var app = new Vue({
     el: '#app',
     data: {
       barrios:'',
       nuevoBarrio:{
+          _id:'',
           barrio:'',
           valor:''
       },
+      estaActualizando: false,
       archivoCSV:''
     },
-    created: async function () {
-        this.barrios = await AxiosRequest.get(url)
+    created: function () {
+        this.barrios = dataStorage.getdata('domicilio')
     },
     computed:{
     },
     methods:{
         guardar(){
-            AxiosRequest.post({
+            dataStorage.setData('domicilio',{
                 barrio: this.nuevoBarrio.barrio,
                 valor: this.nuevoBarrio.valor
-            }, url)
-            .then( async res => {
+            })
+            .then(res => {
                 this.nuevoBarrio.barrio = ''
                 this.nuevoBarrio.valor = ''
-                this.barrios = await AxiosRequest.get(url)
+                this.barrios = dataStorage.getdata('domicilio')
             })
+        },
+        actualizar(){
+            dataStorage.updateData('domicilio',this.nuevoBarrio)
+            .then(res => {
+                this.nuevoBarrio._id = ''
+                this.nuevoBarrio.barrio = ''
+                this.nuevoBarrio.valor = ''
+                this.barrios = dataStorage.getdata('domicilio')
+            })
+            this.estaActualizando = false
         },
         guardarDesdeCSV(){
             CSVreader.parseData(this.archivoCSV)
-            .then( async domiciliosCSV => {
-                await AxiosRequest.post(domiciliosCSV, url+'/conjunto')
-                this.barrios = await AxiosRequest.get(url)
+            .then( async domicilioCSV => {
+                await dataStorage.setData('domicilio',domicilioCSV,'/conjunto')
+                this.archivoCSV = ''
+                this.barrios = dataStorage.getdata('domicilio')
             })
             
+        },
+        formatoMoneda(valor){
+            return formato.moneda(valor)
+        },
+        editar(infoDomicilio){
+            this.nuevoBarrio._id = infoDomicilio._id
+            this.nuevoBarrio.barrio = infoDomicilio.barrio
+            this.nuevoBarrio.valor = infoDomicilio.valor
+            this.estaActualizando = true
+        },
+        eliminar(infoDomicilio){
+            const deseaEliminar = confirm(`Esta seguro que desea eliminar el barrio ${infoDomicilio.barrio}`)
+            if(deseaEliminar){
+                dataStorage.deleteData('domicilio',infoDomicilio._id)
+                .then(res => {
+                    this.barrios = dataStorage.getdata('domicilio')
+                })
+            }
         }
     }
 })

@@ -13,11 +13,13 @@
     "electron": "^9.0.2"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "d3-fetch": "^1.2.0",
     "electron-reload": "^1.5.0",
     "html2canvas": "^1.0.0-rc.5",
     "javascript-time-ago": "^2.0.7",
     "jspdf": "^1.5.3",
+    "nedb": "^1.8.0",
     "socket.io-client": "^2.3.0"
   }
 }

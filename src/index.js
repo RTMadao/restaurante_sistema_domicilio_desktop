@@ -5,8 +5,8 @@ const path = require('path')
 let mainWindow
 
 //websocket
-const socketclient = require('./socket')
-socketclient.start()
+//const socketclient = require('./socket')
+//socketclient.start()
 
 if(process.env.NODE_ENV !== 'production'){
     require('electron-reload')(__dirname, {
@@ -36,10 +36,17 @@ const templateMenu = [
         label: 'Opciones',
         submenu: [
             {
-                label: 'Pedido',
+                label: 'Generar Reporte',
                 accelerator: 'Ctrl+P',
                 click(){
-                    
+                    let win = new BrowserWindow({ width: 400, height: 500, webPreferences: { nodeIntegration: true } })
+                    win.on('close', function () { win = null })
+                    win.loadURL((url.format({
+                        pathname: path.join(__dirname, 'views/Ireporte.html'),
+                        protocol: 'file',
+                        slashes: true
+                    })))
+                    win.show()
                 }
             },
             {

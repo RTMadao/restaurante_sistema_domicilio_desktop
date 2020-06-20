@@ -70,7 +70,8 @@
         <h6>CELMIRA LOBELO TAPIA</h6>
         <h6>NIT: 33138369-6 REG COMUN</h6>
         <h6>FACTURA DE VENTA</h6>
-        <h6>{{formatofecha(factura.pedido.hora)}}</h6>
+        <h6>FACTURA Nº {{factura.pedido.consecutivo}}</h6>
+        <h6>{{formatofecha(factura.pedido.fechaHora)}}</h6>
         <h6>Cliente: {{factura.cliente.nombre}}</h6>
         <h6>Direccion: {{factura.cliente.direccion}}</h6>
         <h6>Telefono: {{factura.cliente.telefono}}</h6> 
@@ -118,12 +119,7 @@
                 factura: ''
             },
             created() {
-                try {
-                    this.factura = JSON.parse(fs.readFileSync(path.join( __dirname, '/../factura.json'), 'utf8'))
-                } catch (err) {
-                    console.error(err)
-                }
-                console.log(this.factura)
+                this.factura = JSON.parse(localStorage.getItem('factura'))
             },
             methods: {
                 moneda(valor){

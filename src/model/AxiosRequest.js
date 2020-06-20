@@ -1,9 +1,11 @@
+const axios = require('axios');
+const {serverURL} = require('../config')
+
 class AxiosRequest {
-    post(body, url) {
+    post(body,filtro) {
         return new Promise ((resolve, reject) => {
-            axios.post(url, body)
+            axios.post(serverURL+filtro, body)
             .then(function(res) {
-                console.log(res.data.mensaje)
                 resolve(res.data.mensaje)
             })
             .catch(function(err) {
@@ -12,9 +14,9 @@ class AxiosRequest {
         })
     }
     
-    get(url) {
+    get(filtro) {
         return new Promise ((resolve, reject) => {
-            axios.get(url, {
+            axios.get(serverURL+filtro, {
             responseType: 'json'
           })
             .then(function(res) {
@@ -22,6 +24,30 @@ class AxiosRequest {
             })
             .catch(function(err) {
               console.log(err);
+            })
+        })
+    }
+
+    put(body,filtro) {
+        return new Promise ((resolve, reject) => {
+            axios.put(serverURL+filtro, body)
+            .then(function(res) {
+                resolve(res.data.mensaje)
+            })
+            .catch(function(err) {
+                console.log(err);
+            })
+        })
+    }
+
+    delete(filtro) {
+        return new Promise ((resolve, reject) => {
+            axios.delete(serverURL+filtro)
+            .then(function(res) {
+                resolve(res.data.mensaje)
+            })
+            .catch(function(err) {
+                console.log(err);
             })
         })
     }

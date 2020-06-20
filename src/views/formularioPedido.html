@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Pedido</title>
+    <!-- css -->
+    <link rel="stylesheet" href="../css/index.css">
+
+    <!-- Materialize -->
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <div class="row" style="margin: 20px 20px;">
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input v-model="nuevoPedido.cliente.nombre" type="text" class="validate">
+                        <label class="active">Nombre</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="autocomplete" v-model="nuevoPedido.cliente.barrio" type="text" class="autocompleteD">
+                        <label for="autocomplete" class="active">Barrio</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input v-model="nuevoPedido.cliente.telefono" type="text" class="validate">
+                        <label class="active">Telefono</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input v-model="nuevoPedido.cliente.direccion" type="text" class="validate">
+                        <label class="active">Direccion</label>
+                    </div>
+                </div>
+                <div>
+                    <ul class="collection">
+                        <li v-for="plato in nuevoPedido.pedido.platos" class="collection-item">{{plato.nombre}}<div class="secondary-content">{{plato.cantidad}}</div></li>
+                    </ul>
+                    <div class="row">
+                        <div class="input-field col s9">
+                            <input v-model="item.nombre" id="autocomplete" type="text" class="autocompleteM">
+                            <label for="autocomplete" class="active">Plato</label>
+                        </div>
+                        <div class="input-field col s2">
+                            <input v-model="item.cantidad"  type="number" class="validate">
+                            <label class="active">Cantidad</label>
+                        </div>
+                        <a class="btn waves-effect waves-light col s1" style="margin-top: 25px;"  v-on:click="agregarItem">+</a>
+                    </div>
+                    <h4>Domicilio  {{nuevoPedido.pedido.valorDomicilio}}</h4>
+                    <h4>Total  {{total}}</h4>
+                    <a class="btn waves-effect waves-light col s12" style="margin-top: 25px;"  v-on:click="guardar">Guardar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../controller/pedido.controller.js"></script>
+</body>
+</html>

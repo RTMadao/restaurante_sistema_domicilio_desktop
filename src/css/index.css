@@ -1,5 +1,7 @@
 .marcoLateral{
-    margin: 20px;
+    position: absolute;
+    width: 200px;
+    height: 93%;
 }
 
 html {
@@ -23,14 +25,12 @@ footer {
 .factura{
     text-align: center;
 }
-.printme {
-	display: none;
+.contenedor-tabla{
+    height: 600px;
+    margin-left: 300px; 
+    margin-right: 50px;
 }
-@media print {
-	.no-printme  {
-		display: none;
-	}
-	.printme  {
-		display: block;
-	}
+.tabla-pedidos{
+    margin-top: 0px;
+    height: 450px;
 }

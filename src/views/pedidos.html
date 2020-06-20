@@ -17,9 +17,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-    <!-- axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
 </head>
 <body>
     <nav>
@@ -28,81 +25,87 @@
         </div>
     </nav>
     <div class="row">
-        <div class="barraLateral" style="padding: 0px 0px;">
+        <div class="marcoLateral" style="padding: 0px 0px;">
             <div class="collection barraLateral" style="margin: 0px 0px;">
                 <a href="#!" class="collection-item active ">Pedido<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
                 <a href="../views/menu.html" class="collection-item">Menu<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
                 <a href="../views/domicilio.html" class="collection-item">Domicilio<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-                <a href="../views/reporte.html" class="collection-item">Reporte diario<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
             </div>
         </div>
         <div id="app" style="margin-left: 200px;">
-            <div class="col s5 m5">
-                <div class="col s12 m12" v-for="pedido in pedidos">
-                    <div class="card teal lighten-1" v-if="pedido.cliente != undefined">
-                      <div class="card-content white-text">
-                        <span class="card-title">{{pedido.cliente.nombre}}</span>
-                        <span class="card-title">{{pedido.cliente.telefono}}</span>
-                        <span class="card-title">{{pedido.cliente.direccion}}</span>
-                        <ul class="collection with-header">
-                            <li v-for="plato in pedido.pedido.platos" class="collection-item teal lighten-1">{{plato.nombre}}<div class="secondary-content"><p style="color: azure;">{{plato.cantidad}}</p></div></li>
-                        </ul>
-                      </div>
-                      <div class="card-action">
-                          <div class="row">
-                            <a v-on:click="generarPDF(pedido)" href="#">Imprimir</a>
-                            <a href="#" v-on:click="marcarPedidoEntregado(pedido)">Entregado</a>
-                            <a href="#" class="right disable">{{getTimeAgo(pedido.pedido.hora)}}</a>
-                          </div>
-                      </div>
-                    </div>
+            <div class="col s12 m12 tabla-pedidos">
+                <h5>Pedidos Pendientes</h5>
+                <table>
+                    <thead>
+                      <tr>
+                        <th style="width: 13%;">Cliente</th>
+                        <th style="width: 10%;">telefono</th>
+                        <th style="width: 15%;">Barrio</th>
+                        <th style="width: 13%;">Total</th>
+                        <th style="width: 17%;">tiempo</th> 
+                        <th style="width: 17%;">Opciones</th>
+                      </tr>
+                    </thead>
+                </table>
+                <div  style="overflow-y: scroll; height: 80%;">
+                    <table v-if="pendientes!=undefined">
+                        <tbody>
+                          <tr v-for="pedido in pendientes">
+                            <td style="width: 13%;">{{pedido.cliente.nombre}}</td>
+                            <td style="width: 10%;">{{pedido.cliente.telefono}}</td>
+                            <td style="width: 15%;">{{pedido.cliente.barrio}}</td>
+                            <td style="width: 13%;">{{formatoMoneda(pedido.pedido.total)}}</td>
+                            <td style="width: 17%;">{{getTimeAgo(pedido.pedido.fechaHora)}}</td>
+                            <td style="width: 17%;">
+                              <a v-on:click="imprimir(pedido)" class="waves-effect waves-teal btn-flat"><i class="material-icons">receipt</i></a>
+                              <a v-on:click="marcarPedidoEntregado(pedido)" class="waves-effect waves-teal btn-flat"><i class="material-icons">send</i></a>
+                              <a v-on:click="eliminarPorID(pedido)" class="waves-effect waves-teal btn-flat"><i class="material-icons">delete</i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="col s5 m7">
-                <div class="row" style="margin: 50px 100px;">
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input v-model="nuevoPedido.nombre" type="text" class="validate">
-                            <label class="active">Nombre</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input id="autocomplete" v-model="nuevoPedido.barrio" type="text" class="autocompleteD">
-                            <label for="autocomplete" class="active">Barrio</label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input v-model="nuevoPedido.telefono" type="text" class="validate">
-                            <label class="active">Telefono</label>
-                        </div>
-                        <div class="input-field col s6">
-                            <input v-model="nuevoPedido.direccion" type="text" class="validate">
-                            <label class="active">Direccion</label>
-                        </div>
-                    </div>
-                    <div>
-                        <ul class="collection">
-                            <li v-for="plato in nuevoPedido.pedido.platos" class="collection-item">{{plato.nombre}}<div class="secondary-content">{{plato.cantidad}}</div></li>
-                        </ul>
-                        <div class="row">
-                            <div class="input-field col s9">
-                                <input v-model="item.nombre" id="autocomplete" type="text" class="autocompleteM">
-                                <label for="autocomplete" class="active">Plato</label>
-                            </div>
-                            <div class="input-field col s2">
-                                <input v-model="item.cantidad"  type="number" class="validate">
-                                <label class="active">Cantidad</label>
-                            </div>
-                            <a class="btn waves-effect waves-light col s1" style="margin-top: 25px;"  v-on:click="agregarItem">+</a>
-                        </div>
-                        <h4>Domicilio  {{nuevoPedido.pedido.valorDomicilio}}</h4>
-                        <h4>Total  {{total}}</h4>
-                        <a class="btn waves-effect waves-light col s12" style="margin-top: 25px;"  v-on:click="guardar">Guardar</a>
-                    </div>
+            <div class="col s12 m12 tabla-pedidos">
+                <h5>Pedidos Entregados</h5>
+                <table>
+                    <thead>
+                      <tr>
+                        <th style="width: 13%;">Cliente</th>
+                        <th style="width: 10%;">telefono</th>
+                        <th style="width: 15%;">Barrio</th>
+                        <th style="width: 13%;">Total</th>
+                        <th style="width: 17%;">tiempo</th>
+                        <th style="width: 17%;">Opciones</th>
+                      </tr>
+                    </thead>
+                </table>
+                <div  style="overflow-y: scroll; height: 80%;">
+                    <table v-if="entregados!=undefined">
+                        <tbody>
+                          <tr v-for="pedido in entregados">
+                            <td style="width: 13%;">{{pedido.cliente.nombre}}</td>
+                            <td style="width: 10%;">{{pedido.cliente.telefono}}</td>
+                            <td style="width: 15%;">{{pedido.cliente.barrio}}</td>
+                            <td style="width: 13%;">{{formatoMoneda(pedido.pedido.total)}}</td>
+                            <td style="width: 17%;">{{getTimeAgo(pedido.pedido.fechaHora)}}</td>
+                            <td style="width: 17%;">
+                              <a v-on:click="imprimir(pedido)" class="waves-effect waves-teal btn-flat"><i class="material-icons">receipt</i></a>
+                              <a v-on:click="eliminarPorID(pedido)" class="waves-effect waves-teal btn-flat"><i class="material-icons">delete</i></a>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+            <div id="btn-new" class="fixed-action-btn" style="margin-right: 70px;">
+                <a v-on:click="abrirFormularioPedido" class="btn-floating waves-effect waves-light btn-large teal lighten-1"><i class="material-icons">add</i></a>
+            </div>
+            <div id="btn-refresh" class="fixed-action-btn">
+                <a v-on:click="refresh" class="btn-floating waves-effect waves-light btn-large teal lighten-1"><i class="material-icons">refresh</i></a>
             </div>
         </div>
     </div>
-    <script src="../controller/pedido.cpntroller.js"></script>
+    <script src="../controller/pedido.controller.js"></script>
 </body>
 </html>

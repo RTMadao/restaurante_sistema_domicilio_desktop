@@ -70,7 +70,7 @@
         <h5>RESTAURANTE RICO MONDONGO</h5>
         <h6>CELMIRA LOBELO TAPIA</h6>
         <h6>NIT: 33138369-6 REG COMUN</h6>
-        <h6>fecha: {{reporte.fecha}}</h6>
+        <h6>fecha: {{formatofecha(reporte.fecha)}}</h6>
         <table>
             <thead>
                 <tr>
@@ -81,19 +81,18 @@
             </thead>
     
             <tbody>
-                <tr v-for="item in reporte.items">
+                <tr v-for="item in reporte.platosVendidos">
                 <td>{{item.nombre}}</td>
                 <td>{{item.cantidad}}</td>
-                <td>{{item.valor}}</td>
+                <td>{{moneda(item.valor)}}</td>
                 </tr>
             </tbody>
             </table>
-            <h6>Domicilio: {{reporte.valorDomicilio}}</h6>
-            <h6>Total: {{reporte.total}}</h6>
+            <h6>Domicilio: {{moneda(reporte.totalDomicilio)}}</h6>
+            <h6>Total: {{moneda(reporte.totalVendido)}}</h6>
     </div>
     <script>
-        const path = require('path')
-        const fs = require('fs')
+        const axiosRequest = require('../model/AxiosRequest')
         const url = 'http://localhost:3000/reporte'
         
         var app = new Vue({
@@ -102,11 +101,10 @@
                 reporte: ''
             },
             created() {
-                axios.get(url, {
-                    responseType: 'json'
-                })
-                .then((res) => {
-                    this.reporte = res.data.reporte
+                axiosRequest.get('reporte/generar')
+                .then((reporte) => {
+                    
+                    this.reporte = reporte
                     console.log(this.reporte);
                     setTimeout(() => {  window.print(); }, 2000);
                     
@@ -124,9 +122,9 @@
                     }).format(valor);
                 },
                 formatofecha(fecha){
-                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: false};
+                    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
                     return new Date(fecha).toLocaleDateString('es-CO', options)
-                }
+                },
             },
         })
         

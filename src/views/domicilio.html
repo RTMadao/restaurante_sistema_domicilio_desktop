@@ -17,8 +17,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- vue -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-    <!-- axios -->
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <nav>
@@ -27,34 +25,41 @@
         </div>
     </nav>
     <div class="row">
-        <div class="barraLateral" style="padding: 0px 0px;">
-            <div class="collection barraLateral" style="margin: 0px 0px;">
-                <a href="../views/pedidos.html" class="collection-item">Pedido<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-                <a href="../views/menu.html" class="collection-item">Menu<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-                <a href="#!" class="collection-item active">Domicilio<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-                <a href="../views/reporte.html" class="collection-item">Reporte diario<div class="secondary-content"><i class="material-icons">chevron_right</i></div></a>
-            </div>
+      <div class="marcoLateral" style="padding: 0px 0px;">
+        <div class="collection barraLateral" style="margin: 0px 0px;">
+          <a href="../views/pedidos.html" class="collection-item">Pedido<div class="secondary-content"><i
+                class="material-icons">chevron_right</i></div></a>
+          <a href="../views/menu.html" class="collection-item">Menu<div class="secondary-content"><i
+                class="material-icons">chevron_right</i></div></a>
+          <a href="#!" class="collection-item active">Domicilio<div class="secondary-content"><i
+                class="material-icons">chevron_right</i></div></a>
         </div>
+      </div>
         <div id="app" style="margin-left: 200px;">
-            <div class="row" style="margin-top: 50;">
-              <div class="col s6 m4" style="margin-left: 100px; margin-right: 50px;">
+            <div class="row">
+              <div class="col s6 m6 contenedor-tabla">
                 <table>
                   <thead>
                     <tr>
                         <th>Barrio</th>
                         <th>Valor</th>
+                        <th>Opciones</th>
                     </tr>
                   </thead>
           
                   <tbody>
                     <tr v-for="barrio in barrios">
                       <td>{{barrio.barrio}}</td>
-                      <td>{{barrio.valor}}</td>
+                      <td>{{formatoMoneda(barrio.valor)}}</td>
+                      <td>
+                        <a v-on:click="editar(barrio)" class="waves-effect waves-teal btn-flat"><i class="material-icons">edit</i></a>
+                        <a v-on:click="eliminar(barrio)" class="waves-effect waves-teal btn-flat"><i class="material-icons">delete</i></a>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <div class="col s6 m4">
+              <div class="col s4 m4"  style="margin-top: 50px;">
                   <div class="card-pane blue-grey lighten-4" style="padding: 15px 10px; align-items: center;">
                     <div class="card-content">
                       <div style="text-align: center;">
@@ -69,7 +74,8 @@
                       <input v-model="nuevoBarrio.valor" type="text" class="validate">
                       <label class="active">Valor</label>
                     </div>
-                    <a class="btn waves-effect waves-light" style="width: 90%; margin-left: 5%" v-on:click="guardar">Guardar</a>
+                    <a v-if="estaActualizando" class="btn waves-effect waves-light" style="width: 90%; margin-left: 5%" v-on:click="actualizar">Actualizar</a>
+                    <a v-else class="btn waves-effect waves-light" style="width: 90%; margin-left: 5%" v-on:click="guardar">Guardar</a>
                   </div>
                 <div class="row col s12 m12" style="margin-top: 30px;">
                   <h5>Cargar desde archivo</h5>

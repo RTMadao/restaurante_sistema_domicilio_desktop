@@ -1,5 +1,5 @@
 const d3 = require('d3-fetch')
-const UTFCoding = require('./UTFCoding')
+const formato = require('./FormatoInfo')
 
 class CSVReader {
     
@@ -15,7 +15,7 @@ class CSVReader {
 
     decodeData(data){
         data.forEach(element => {
-            element.nombre = UTFCoding.decode_utf8(element.nombre);
+            element.nombre = formato.decode_utf8(element.nombre);
         });
         return data
     }

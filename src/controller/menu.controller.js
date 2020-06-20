@@ -1,12 +1,6 @@
-const url = 'http://localhost:3000/menu'
 const CSVreader = require('../model/CSVReader')
-const AxiosRequest = require('../model/AxiosRequest')
-
-
-function getCSV(file) {
-    app.archivoCSV = file[0].path;
-}
-
+const dataStorage = require('../model/DataStorage')
+const formato = require('../model/FormatoInfo')
 
 
 var app = new Vue({
@@ -14,35 +8,66 @@ var app = new Vue({
     data: {
       menu:'',
       nuevoPlato:{
+          _id:'',
           nombre:'',
           precio:''
       },
+      estaActualizando: false,
       archivoCSV:''
     },
-    created: async function () {
-        this.menu = await AxiosRequest.get(url)
+    created: function () {
+        this.menu = dataStorage.getdata('menu')
     },
     computed:{
     },
     methods:{
         guardar(){
-            AxiosRequest.post({
+            dataStorage.setData('menu',{
                 nombre: this.nuevoPlato.nombre,
                 precio: this.nuevoPlato.precio
-            }, url)
-            .then( async res => {
+            })
+            .then(res => {
                 this.nuevoPlato.nombre = ''
                 this.nuevoPlato.precio = ''
-                this.menu = await AxiosRequest.get(url)
+                this.menu = dataStorage.getdata('menu')
             })
+        },
+        actualizar(){
+            dataStorage.updateData('menu',this.nuevoPlato)
+            .then(res => {
+                this.nuevoPlato._id = ''
+                this.nuevoPlato.nombre = ''
+                this.nuevoPlato.precio = ''
+                this.menu = dataStorage.getdata('menu')
+            })
+            this.estaActualizando = false
         },
         guardarDesdeCSV(){
             CSVreader.parseData(this.archivoCSV)
             .then( async menuCSV => {
-                await AxiosRequest.post(menuCSV, url+'/conjunto')
-                this.menu = await AxiosRequest.get(url)
+                await dataStorage.setData('menu',menuCSV,'/conjunto')
+                this.archivoCSV = ''
+                this.menu = dataStorage.getdata('menu')
             })
             
+        },
+        formatoMoneda(valor){
+            return formato.moneda(valor)
+        },
+        editar(infoMenu){
+            this.nuevoPlato._id = infoMenu._id
+            this.nuevoPlato.nombre = infoMenu.nombre
+            this.nuevoPlato.precio = infoMenu.precio
+            this.estaActualizando = true
+        },
+        eliminar(infoMenu){
+            const deseaEliminar = confirm(`Esta seguro que desea eliminar el plato ${infoMenu.nombre}`)
+            if(deseaEliminar){
+                dataStorage.deleteData('menu',infoMenu._id)
+                .then(res => {
+                    this.menu = dataStorage.getdata('menu')
+                })
+            }
         }
     }
 })
