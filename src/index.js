@@ -1,6 +1,8 @@
-const {app, BrowserWindow, Menu} = require('electron')
+const {app, BrowserWindow, Menu, dialog} = require('electron')
 const url = require('url')
 const path = require('path')
+const dataStorage = require('./model/DataStorage')
+const { log } = require('console')
 
 let mainWindow
 
@@ -47,27 +49,6 @@ const templateMenu = [
                         slashes: true
                     })))
                     win.show()
-                }
-            },
-            {
-                label: 'Menu',
-                accelerator: 'Ctrl+M',
-                click(){
-                    
-                }
-            },
-            {
-                label: 'Domicilio',
-                accelerator: 'Ctrl+D',
-                click(){
-                    
-                }
-            },
-            {
-                label: 'Reporte diario',
-                accelerator: 'Ctrl+T',
-                click(){
-                    
                 }
             }
         ]

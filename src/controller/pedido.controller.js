@@ -21,15 +21,11 @@ document.addEventListener('DOMContentLoaded', function() {
     var elemsM = document.querySelectorAll('.autocompleteM');
     var buttonNew = document.getElementById('btn-new');
     var buttonrefresh = document.getElementById('btn-refresh');
+    var elems = document.querySelectorAll('.fixed-action-btn');
 
-    var instances = M.FloatingActionButton.init(buttonNew, {
-        direction: 'right',
-        hoverEnabled: false
-    });
-
-    var instances = M.FloatingActionButton.init(buttonrefresh, {
-        direction: 'right',
-        hoverEnabled: false
+    var instances = M.FloatingActionButton.init(elems, {
+        direction: 'left',
+        hoverEnabled: true
     });
 
     const domicilios = dataStorage.getdata('domicilio')
@@ -122,29 +118,25 @@ var app = new Vue({
             .then(res => {
                 this.pedidos = dataStorage.getdata('pedido')
             })
-            this.nuevoPedido.cliente.nombre = ''
-            this.nuevoPedido.cliente.barrio = ''
-            this.nuevoPedido.cliente.telefono = ''
-            this.nuevoPedido.cliente.direccion = ''
-            this.nuevoPedido.pedido.platos = []
-            this.nuevoPedido.pedido.valorDomicilio = 0
-            this.nuevoPedido.pedido.base = 0
-            this.nuevoPedido.pedido.total = 0
+            this.limpiarFormulario()
         },
         agregarItem(){
-            const found = menu.find(element => {
-                return element.nombre == nombrePlato
-            });
-            this.nuevoPedido.pedido.base += found.precio * this.item.cantidad
-            this.nuevoPedido.pedido.platos.push({
-                nombre: nombrePlato,
-                cantidad: this.item.cantidad,
-                precio: found.precio,
-                total: found.precio * this.item.cantidad
-            })
-            this.item.nombre = ''
-            this.item.cantidad = ''
-            
+            if(this.item.nombre != '' && this.item.cantidad != '')
+            {
+                const found = menu.find(element => {
+                    return element.nombre == nombrePlato
+                });
+                this.nuevoPedido.pedido.base += found.precio * this.item.cantidad
+                this.nuevoPedido.pedido.platos.push({
+                    nombre: nombrePlato,
+                    cantidad: this.item.cantidad,
+                    precio: found.precio,
+                    total: found.precio * this.item.cantidad
+                })
+                this.item.nombre = ''
+                this.item.cantidad = ''
+            }
+            else alert("Asegurese de llenar los campos de plato y cantidad")
         },
         getTimeAgo(date){
             return timeAgo.format(new Date(date))
@@ -177,7 +169,13 @@ var app = new Vue({
             this.pedidos = dataStorage.getdata('pedido')
         },
         eliminar(){
-
+            const deseaEliminar = confirm(`Esta seguro que desea eliminar todos los pedidos del dia`)
+            if(deseaEliminar){
+                dataStorage.deleteData('pedido')
+                .then(res => {
+                    this.pedidos = dataStorage.getdata('pedido')
+                })
+            }
         },
         eliminarPorID(pedido){
             const deseaEliminar = confirm(`Esta seguro que desea eliminar el pedido ${pedido.pedido.consecutivo}`)
@@ -187,6 +185,28 @@ var app = new Vue({
                     this.pedidos = dataStorage.getdata('pedido')
                 })
             }
+        },
+        removerPlatoPedido(indexPlanto, plato){
+            this.nuevoPedido.pedido.base -= plato.total
+            this.nuevoPedido.pedido.platos.splice(indexPlanto,1)
+        },
+        limpiarFormulario(){
+            this.nuevoPedido = {
+                cliente:{
+                    nombre: '',
+                    barrio: '',
+                    direccion: '',
+                    telefono: '',
+                },
+                pedido:{
+                    platos: [],
+                    valorDomicilio: 0,
+                    base: 0,
+                    total: 0
+                }
+            }
+            this.item.nombre = ''
+            this.item.cantidad = ''
         }
     }
 })

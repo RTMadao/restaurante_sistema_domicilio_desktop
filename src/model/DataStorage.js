@@ -29,6 +29,7 @@ class DataStorage {
         return new Promise (async(resolve, reject) => {
             await AxiosRequest.delete((id==undefined) ? key : key+'/'+id)
             const data = await AxiosRequest.get(key)
+            console.log(data);
             localStorage.setItem(key,JSON.stringify(data))
             resolve(null)
         })

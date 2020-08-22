@@ -97,13 +97,15 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            <div id="btn-new" class="fixed-action-btn" style="margin-right: 70px;">
-                <a v-on:click="abrirFormularioPedido" class="btn-floating waves-effect waves-light btn-large teal lighten-1"><i class="material-icons">add</i></a>
-            </div>
-            <div id="btn-refresh" class="fixed-action-btn">
-                <a v-on:click="refresh" class="btn-floating waves-effect waves-light btn-large teal lighten-1"><i class="material-icons">refresh</i></a>
-            </div>
+              </div>
+          <div class="fixed-action-btn">
+            <a class="btn-floating btn-large waves-teal"><i class="large material-icons">arrow_back</i></a>
+            <ul>
+              <li><a v-on:click="eliminar" class="btn-floating green"><i class="material-icons">delete_forever</i></a></li>
+              <li><a v-on:click="abrirFormularioPedido" class="btn-floating red"><i class="material-icons">add</i></a></li>
+              <li><a v-on:click="refresh" class="btn-floating yellow darken-1"><i class="material-icons">refresh</i></a></li>
+            </ul>
+          </div>
         </div>
     </div>
     <script src="../controller/pedido.controller.js"></script>

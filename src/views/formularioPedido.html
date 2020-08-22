@@ -43,7 +43,11 @@
                 </div>
                 <div>
                     <ul class="collection">
-                        <li v-for="plato in nuevoPedido.pedido.platos" class="collection-item">{{plato.nombre}}<div class="secondary-content">{{plato.cantidad}}</div></li>
+                        <li v-for="(plato, index) in nuevoPedido.pedido.platos" class="collection-item">{{plato.cantidad}} - {{plato.nombre}}
+                            <div class="secondary-content" >
+                                <a href="#!" v-on:click="removerPlatoPedido(index, plato)"><i class="material-icons">cancel</i></a>
+                            </div>
+                        </li>
                     </ul>
                     <div class="row">
                         <div class="input-field col s9">
@@ -58,7 +62,10 @@
                     </div>
                     <h4>Domicilio  {{nuevoPedido.pedido.valorDomicilio}}</h4>
                     <h4>Total  {{total}}</h4>
-                    <a class="btn waves-effect waves-light col s12" style="margin-top: 25px;"  v-on:click="guardar">Guardar</a>
+                    <div class="row">
+                        <a class="btn waves-effect waves-light col s5" style="margin: 25px 4%;"  v-on:click="guardar">Guardar</a>
+                        <a class="btn waves-effect waves-light col s5" style="margin: 25px 4%;"  v-on:click="limpiarFormulario">Cancelar</a>
+                    </div>
                 </div>
             </div>
         </div>

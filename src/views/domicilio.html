@@ -46,18 +46,21 @@
                         <th>Opciones</th>
                     </tr>
                   </thead>
-          
-                  <tbody>
-                    <tr v-for="barrio in barrios">
-                      <td>{{barrio.barrio}}</td>
-                      <td>{{formatoMoneda(barrio.valor)}}</td>
-                      <td>
-                        <a v-on:click="editar(barrio)" class="waves-effect waves-teal btn-flat"><i class="material-icons">edit</i></a>
-                        <a v-on:click="eliminar(barrio)" class="waves-effect waves-teal btn-flat"><i class="material-icons">delete</i></a>
-                      </td>
-                    </tr>
-                  </tbody>
                 </table>
+                <div   style="overflow-y: scroll; height: 100%;">
+                  <table>
+                    <tbody>
+                      <tr v-for="barrio in barrios">
+                        <td>{{barrio.barrio}}</td>
+                        <td>{{formatoMoneda(barrio.valor)}}</td>
+                        <td>
+                          <a v-on:click="editar(barrio)" class="waves-effect waves-teal btn-flat"><i class="material-icons">edit</i></a>
+                          <a v-on:click="eliminar(barrio)" class="waves-effect waves-teal btn-flat"><i class="material-icons">delete</i></a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <div class="col s4 m4"  style="margin-top: 50px;">
                   <div class="card-pane blue-grey lighten-4" style="padding: 15px 10px; align-items: center;">
